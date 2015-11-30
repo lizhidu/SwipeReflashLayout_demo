@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#fafafa"
+    android:layout_height="55dp">
+
+
+    <ProgressBar
+        android:id="@+id/progressbar_loading"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:id="@+id/tv_no_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="信息提示！"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        />
+</LinearLayout>
