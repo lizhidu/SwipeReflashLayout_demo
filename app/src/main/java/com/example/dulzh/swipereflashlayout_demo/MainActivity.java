@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
             @Override
             public void run() {
                 curNum++;
-                if (curNum <= 3) {
+                if (curNum <= 2) {
                     getNewBottomData();
                     myAdapter.notifyDataSetChanged();
                     loadMoreListView.onLoadMoreComplete();  //false

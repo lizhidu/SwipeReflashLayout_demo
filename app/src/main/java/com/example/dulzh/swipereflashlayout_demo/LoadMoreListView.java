@@ -139,14 +139,14 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
             if (!mIsLoadMore && loadMore
                     && mCurrentLoadState != SCROLL_STATE_IDLE
                     && !mNoMoreLoad) {
-                mIsLoadMore = true;
+                mIsLoadMore = true; //加载更多的状态
                 mOnLoadMoreListener.onLoadMore(view);
             }
         }
     }
 
     public void onLoadMoreComplete() {
-        mIsLoadMore = false;
+        mIsLoadMore = false; //当在加载数据的时候，设置mIsLoadMore ＝ false，不允许加载（重复）
     }
 
    //设置加载更多，true 表示没有数据加载，false ，表示有可加载数据
