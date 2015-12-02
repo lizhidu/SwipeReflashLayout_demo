@@ -32,7 +32,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center|top"
             android:gravity="center"
-            android:text="获取更多"
+            android:text="数据全部加载完成！"
             android:textSize="16sp" />
 
         <ProgressBar

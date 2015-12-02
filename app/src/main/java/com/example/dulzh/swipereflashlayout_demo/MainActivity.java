@@ -74,10 +74,10 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
      */
     private void getNewBottomData() {
         int size = mData.size();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             Map<String, Object> listItem = new HashMap<>();
             listItem.put("img", R.mipmap.ic_launcher);
-            listItem.put("text", "New Bottom Item "+(size + i));
+            listItem.put("text", "New Bottom Item " + (size + i));
             mData.add(listItem);
 
 
@@ -116,15 +116,16 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                curNum++;
-//                if(curNum>=5){
+                curNum++;
+                if (curNum <= 3) {
                     getNewBottomData();
                     myAdapter.notifyDataSetChanged();
-                    loadMoreListView.onLoadMoreComplete();
-                    loadMoreListView.setNoMoreToLoad(false);
-//                }
+                    loadMoreListView.onLoadMoreComplete();  //false
+                    loadMoreListView.setNoMoreToLoad(false); //有可加载数据
+                } else {
+                    loadMoreListView.setNoMoreToLoad(true); //数据全部加载完成
 
-
+                }
             }
         }, 1000);
 
@@ -177,7 +178,7 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
 
         static class ViewHolder {
             TextView textView;
-             ImageView imageView;
+            ImageView imageView;
         }
     }
 }
