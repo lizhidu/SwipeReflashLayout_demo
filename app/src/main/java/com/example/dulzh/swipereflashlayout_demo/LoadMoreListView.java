@@ -149,6 +149,7 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         mIsLoadMore = false;
     }
 
+   //设置加载更多，true 表示没有数据加载，false ，表示有可加载数据
     public void setNoMoreToLoad(boolean noMoreToLoad) {
         mNoMoreLoad = noMoreToLoad;
         if (noMoreToLoad) {
@@ -159,7 +160,7 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
             mNoMoreTextView.setVisibility(GONE);
         }
     }
-
+    //定义接口，子类实现，并且重写方法loadmore（）
     public interface OnLoadMoreListener {
         void onLoadMore(AbsListView view);
     }
