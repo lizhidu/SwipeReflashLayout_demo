@@ -74,11 +74,11 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
             mLoadMoreFooterView.setVisibility(VISIBLE);
             if (adapter.isEmpty()) {
 //                mNoMoreTextView.setText(R.string.empty);
-                mNoMoreTextView.setText("没有数据了！");
+                mNoMoreTextView.setText("当前数据加载失败！");
 
             } else {
 //                mNoMoreTextView.setText(R.string.no_more);
-                mNoMoreTextView.setText("获取更多！");
+                mNoMoreTextView.setText("已无加载数据！");
 
             }
         }

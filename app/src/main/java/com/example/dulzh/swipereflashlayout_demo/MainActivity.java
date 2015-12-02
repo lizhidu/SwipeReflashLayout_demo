@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends Activity implements LoadMoreListView.OnLoadMoreListener, AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
     private LoadMoreListView loadMoreListView;
@@ -22,6 +25,9 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
     ArrayList<String> arrayList;
     int curNum = 0;
     private Handler mHandler = new Handler();
+    private ArrayList<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,21 +46,44 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
         loadMoreListView.setOnScrollListener(this);
         loadMoreListView.setOnLoadMoreListener(this);
 
-        arrayList = new ArrayList<String>();
-        for (int i = 0; i < 30; i++) {
-            String str = "dlzh" + i;
-            arrayList.add(str);
+        for (int i = 0; i < 20; i++) {
+            Map<String, Object> listItem = new HashMap<>();
+            listItem.put("img", R.mipmap.photo);
+            listItem.put("text", "Item " + i);
+            mData.add(listItem);
         }
-        myAdapter = new MyAdapter(this, arrayList);
+        myAdapter = new MyAdapter(this, mData);
         loadMoreListView.setAdapter(myAdapter);
 
     }
 
-    @Override
-    public void onLoadMore(AbsListView view) {
-
-        loadMoreListView.setNoMoreToLoad(true);
+    /**
+     * 模拟下拉刷新时获取新数据
+     * simulate getting new data when pull to refresh
+     */
+    private void getNewTopData() {
+        Map<String, Object> listItem = new HashMap<>();
+        listItem.put("img", R.mipmap.ic_launcher);
+        listItem.put("text", "New Top Item " + mData.size());
+        mData.add(0, listItem);
     }
+
+    /**
+     * 模拟上拉加载更多时获得更多数据
+     * simulate load more data to bottom
+     */
+    private void getNewBottomData() {
+        int size = mData.size();
+        for (int i = 0; i < 2; i++) {
+            Map<String, Object> listItem = new HashMap<>();
+            listItem.put("img", R.mipmap.ic_launcher);
+            listItem.put("text", "New Bottom Item "+(size + i));
+            mData.add(listItem);
+
+
+        }
+    }
+
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -68,39 +97,58 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
 
     @Override
     public void onRefresh() {
-        curNum++;
-        String str = new String("dlzh_new"+curNum++);
-        arrayList.add(str);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                layout_swipe_refresh.setRefreshing(true); //请求开始的时候
+                getNewTopData();
                 myAdapter.notifyDataSetChanged();
-                layout_swipe_refresh.setRefreshing(false);
+                layout_swipe_refresh.setRefreshing(false); // xx 请求结束的时候
             }
-        }, 2000);
+        }, 1000);
 
 
     }
 
-//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+    @Override
+    public void onLoadMore(AbsListView view) {
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                curNum++;
+//                if(curNum>=5){
+                    getNewBottomData();
+                    myAdapter.notifyDataSetChanged();
+                    loadMoreListView.onLoadMoreComplete();
+                    loadMoreListView.setNoMoreToLoad(false);
+//                }
+
+
+            }
+        }, 1000);
+
+    }
+
+    //－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
     public static class MyAdapter extends BaseAdapter {
         private Context context;
-        private ArrayList<String> arrayList;
+        private ArrayList<Map<String, Object>> mData;
 
-        public MyAdapter(Context context, ArrayList<String> arrayList) {
+        public MyAdapter(Context context, ArrayList<Map<String, Object>> mData) {
             this.context = context;
-            this.arrayList = arrayList;
+            this.mData = mData;
         }
 
 
         @Override
         public int getCount() {
-            return arrayList.size();
+            return mData.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return arrayList.get(position);
+            return mData.get(position);
         }
 
         @Override
@@ -117,16 +165,19 @@ public class MainActivity extends Activity implements LoadMoreListView.OnLoadMor
                 convertView = inflater.inflate(R.layout.layout_listview_content, null);
                 viewHolder = new ViewHolder();
                 viewHolder.textView = (TextView) convertView.findViewById(R.id.tv_content);
+                viewHolder.imageView = (ImageView) convertView.findViewById(R.id.iv_photo);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.textView.setText(arrayList.get(position));
+            viewHolder.textView.setText(mData.get(position).get("text").toString());
+            viewHolder.imageView.setImageResource((Integer) mData.get(position).get("img"));
             return convertView;
         }
 
         static class ViewHolder {
             TextView textView;
+             ImageView imageView;
         }
     }
 }
